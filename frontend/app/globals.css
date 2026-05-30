@@ -1,0 +1,73 @@
+/* Tailwind CSS v4 — single import replaces the old @tailwind base/components/utilities. */
+@import "tailwindcss";
+
+/* ── CSS-first theme (replaces tailwind.config.ts in v4) ──────────────
+   Each token below generates utilities automatically:
+     --color-accent  → bg-accent / text-accent / border-accent ...
+     --font-display  → font-display
+     --radius-xs     → rounded-xs
+*/
+@theme {
+  --color-bg: #080c10;
+  --color-surface: #0e1419;
+  --color-surface2: #141c24;
+  --color-border: #1e2d3d;
+  --color-accent: #00d4aa;
+  --color-accent2: #f7931a;
+  --color-accent3: #5b8fff;
+  --color-ink: #e8f0f8;
+  --color-muted: #6a8099;
+  --color-danger: #ff4d6d;
+  --color-warn: #ffd166;
+
+  --font-display: "Syne", sans-serif;
+  --font-mono: "DM Mono", monospace;
+  --font-serif: "Newsreader", serif;
+
+  --radius-xs: 2px;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────── */
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin custom scrollbar to match the dark UI. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+/* Loading skeleton shimmer. */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 0px,
+    var(--color-surface2) 200px,
+    var(--color-surface) 400px
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}

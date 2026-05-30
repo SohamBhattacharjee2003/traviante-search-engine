@@ -1,0 +1,24 @@
+# ── Web framework ──────────────────────────────────────────────
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+python-multipart==0.0.20
+
+# ── ML / CLIP ──────────────────────────────────────────────────
+# CLIP is installed from GitHub; torch is a heavy dependency.
+# On HuggingFace Spaces / Railway these install fine. Locally, if you
+# skip them the backend runs in MOCK mode (see core/clip_encoder.py).
+# torch is left unpinned to a range so it resolves on Python 3.11–3.13
+# (2.5.x has no cp313 wheel; 2.6+ does).
+torch>=2.6.0
+ftfy>=6.3.1
+regex>=2024.11.6
+git+https://github.com/openai/CLIP.git
+pillow>=11.1.0
+numpy>=2.2.1
+requests>=2.32.3
+
+# ── Data services ──────────────────────────────────────────────
+pinecone==5.4.2
+supabase==2.11.0
