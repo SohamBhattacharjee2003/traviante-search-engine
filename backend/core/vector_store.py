@@ -136,8 +136,11 @@ class VectorStore:
             if not self._passes_filter(meta, filters):
                 continue
             cos = float(np.dot(q, vec) / (q_norm * (np.linalg.norm(vec) or 1.0)))
-            # CLIP cosine sits in [-1, 1]; rescale to [0, 1] for a friendly score.
-            scored.append((_id, (cos + 1.0) / 2.0))
+            # Return the RAW cosine (clamped to [0, 1]) to match Pinecone's score
+            # exactly — so the displayed match % is consistent and honest whether
+            # running on the in-memory store or real Pinecone. Unrelated images
+            # then read ~0.7, near-identical ones ~0.95, instead of a flat 0.85+.
+            scored.append((_id, max(0.0, min(1.0, cos))))
         scored.sort(key=lambda x: x[1], reverse=True)
         return scored[:top_k]
 

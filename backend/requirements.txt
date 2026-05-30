@@ -12,6 +12,8 @@ python-multipart==0.0.20
 # torch is left unpinned to a range so it resolves on Python 3.11–3.13
 # (2.5.x has no cp313 wheel; 2.6+ does).
 torch>=2.6.0
+torchvision>=0.21.0
+tqdm>=4.67.0
 ftfy>=6.3.1
 regex>=2024.11.6
 git+https://github.com/openai/CLIP.git
