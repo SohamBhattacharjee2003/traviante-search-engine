@@ -45,9 +45,22 @@ async def lifespan(app: FastAPI):
 
         metadata_store.seed(DESTINATIONS)
         for dest in DESTINATIONS:
-            vector_store.upsert(dest, encoder.encode_images_averaged(
-                [str(u) for u in dest.images]
-            ) if not encoder.is_mock else encoder.encode_text(dest.description))
+            embedding = None
+            if not encoder.is_mock and dest.images:
+                try:
+                    embedding = encoder.encode_images_averaged(
+                        [str(u) for u in dest.images]
+                    )
+                except Exception as exc:  # a bad image URL must not crash startup
+                    logger.warning(
+                        "Image embed failed for %s (%s); falling back to text.",
+                        dest.id, exc,
+                    )
+            if embedding is None:
+                # No real CLIP, no photo, or the download failed: embed the text so
+                # the destination stays searchable (CLIP shares one image/text space).
+                embedding = encoder.encode_text(dest.description or dest.name)
+            vector_store.upsert(dest, embedding)
         logger.info("Mock index ready with %d destinations.", vector_store.count())
 
     app.state.encoder = encoder

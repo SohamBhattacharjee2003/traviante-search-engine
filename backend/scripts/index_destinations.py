@@ -51,7 +51,11 @@ def main() -> int:
         logger.info("[%d/%d] Encoding %s (%s)", i, len(DESTINATIONS), dest.id, dest.name)
         try:
             urls = [str(u) for u in dest.images[:3]]
-            embedding = encoder.encode_images_averaged(urls)
+            if urls:
+                embedding = encoder.encode_images_averaged(urls)
+            else:
+                # No photo for this destination — embed its text so it stays searchable.
+                embedding = encoder.encode_text(dest.description or dest.name)
         except Exception as exc:
             logger.error("  ✗ Failed to encode %s: %s", dest.id, exc)
             continue

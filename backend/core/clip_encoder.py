@@ -84,7 +84,9 @@ class ClipEncoder:
 
         import torch
 
-        tokens = self._tokenizer([text]).to(self.device)
+        # truncate=True clips text past CLIP's 77-token context instead of raising —
+        # catalog descriptions (e.g. Wikipedia extracts) routinely exceed it.
+        tokens = self._tokenizer([text], truncate=True).to(self.device)
         with torch.no_grad():
             feats = self._model.encode_text(tokens).float()
         return self._normalise(feats)
@@ -96,7 +98,10 @@ class ClipEncoder:
 
         import requests
 
-        resp = requests.get(url, timeout=30)
+        # A descriptive User-Agent is required by some hosts (e.g. Wikimedia
+        # returns 403 for the default urllib/requests agent).
+        headers = {"User-Agent": "Traviante/1.0 (destination visual search)"}
+        resp = requests.get(url, timeout=30, headers=headers)
         resp.raise_for_status()
         return self.encode_image(resp.content)
 

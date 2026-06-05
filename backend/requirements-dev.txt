@@ -7,3 +7,8 @@ pydantic-settings==2.7.1
 python-multipart==0.0.20
 numpy==2.2.1
 requests==2.32.3
+
+# Catalog builder (scripts/build_catalog_from_kaggle.py) — one-time offline import
+# of the Kaggle traveler-trip dataset into a real destination catalog.
+kagglehub[pandas-datasets]==0.3.12
+pandas==3.0.3
