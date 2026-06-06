@@ -11,12 +11,23 @@
     "price_min_inr": 155000,
     "price_max_inr": 155000,
     "best_months": [
-      "may"
+      "november",
+      "december",
+      "january",
+      "february",
+      "march"
     ],
     "travel_styles": [
-      "beach"
+      "beach",
+      "luxury",
+      "family",
+      "honeymoon"
     ],
-    "highlights": [],
+    "highlights": [
+      "Patong Beach nightlife",
+      "Big Buddha viewpoint",
+      "Phi Phi Islands day cruise"
+    ],
     "is_active": true
   },
   {
@@ -24,19 +35,32 @@
     "name": "Bali",
     "country": "Indonesia",
     "tagline": "Province in Lesser Sunda Islands, Indonesia",
-    "description": "Bali is an Indonesian island and province and the westernmost of the Lesser Sunda Islands. East of Java and west of Lombok, the province includes the island of Bali and a few smaller offshore islands, notably Nusa Penida, Nusa Lembongan, and Nusa Ceningan to the southeast. The provincial capital, Denpasar, is the most populous city in the Lesser Sunda Islands and the second-largest, after Makassar, in Eastern Indonesia. The Denpasar metropolitan area is the extended metropolitan area around Denpasar. The upland town of Ubud in Greater Denpasar is considered as Bali's cultural centre. The provi",
+    "description": "Bali is an Indonesian island and province and the westernmost of the Lesser Sunda Islands. East of Java and west of Lombok, the province includes the island of Bali and a few smaller offshore islands, notably Nusa Penida, Nusa Lembongan, and Nusa Ceningan to the southeast. The provincial capital, Denpasar, is the most populous city in the Lesser Sunda Islands. The upland town of Ubud in Greater Denpasar is considered Bali's cultural centre, famed for its rice terraces, temples and beaches.",
     "images": [
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Bali_in_Indonesia_%28special_marker%29.svg/330px-Bali_in_Indonesia_%28special_marker%29.svg.png"
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/TanahLot_2014.JPG/330px-TanahLot_2014.JPG"
     ],
     "price_min_inr": 189000,
     "price_max_inr": 189000,
     "best_months": [
-      "april"
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october"
     ],
     "travel_styles": [
-      "beach"
+      "beach",
+      "honeymoon",
+      "cultural",
+      "adventure"
     ],
-    "highlights": [],
+    "highlights": [
+      "Tanah Lot sea temple",
+      "Ubud rice terraces",
+      "Uluwatu clifftop sunset"
+    ],
     "is_active": true
   },
   {
@@ -44,19 +68,29 @@
     "name": "Kyoto",
     "country": "Japan",
     "tagline": "City in the Kansai region of Japan",
-    "description": "Kyoto, officially Kyoto City , is the capital city of Kyoto Prefecture in the Kansai region of Japan's largest and most populous island of Honshu. As of 2020, the city had a population of 1.46 million, making it the ninth-most populous city in Japan. More than half (56.8%) of Kyoto Prefecture's population resides in the city. The city is the cultural anchor of the substantially larger Greater Kyoto, a metropolitan statistical area (MSA) home to a census-estimated 3.8 million people. It is also part of the even larger Keihanshin metropolitan area, along with Osaka and Kobe.",
+    "description": "Kyoto, officially Kyoto City, is the capital city of Kyoto Prefecture in the Kansai region of Japan's largest and most populous island of Honshu. Once the imperial capital for over a thousand years, it is the cultural anchor of the Greater Kyoto region, renowned for its classical Buddhist temples, Shinto shrines, imperial palaces, traditional wooden machiya houses and seasonal cherry blossom and autumn foliage.",
     "images": [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Kiyomizu.jpg/330px-Kiyomizu.jpg"
     ],
     "price_min_inr": 267000,
     "price_max_inr": 267000,
     "best_months": [
-      "march"
+      "march",
+      "april",
+      "may",
+      "october",
+      "november"
     ],
     "travel_styles": [
-      "beach"
+      "cultural",
+      "honeymoon",
+      "family"
     ],
-    "highlights": [],
+    "highlights": [
+      "Fushimi Inari torii gates",
+      "Kinkaku-ji Golden Pavilion",
+      "Arashiyama Bamboo Grove"
+    ],
     "is_active": true
   },
   {
@@ -64,19 +98,32 @@
     "name": "Zermatt",
     "country": "Switzerland",
     "tagline": "Place in Valais, Switzerland",
-    "description": "Zermatt is a municipality in the district of Visp in the German-speaking section of the canton of Valais in Switzerland. It has a year-round population of about 5,800 and is classified as a town by the Swiss Federal Statistical Office (FSO).",
+    "description": "Zermatt is a municipality in the district of Visp in the German-speaking section of the canton of Valais in Switzerland. A car-free mountain resort at the foot of the Matterhorn, it is one of the world's premier destinations for skiing, mountaineering and alpine hiking, with a year-round population of about 5,800.",
     "images": [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/1_zermatt_evening_2022.jpg/330px-1_zermatt_evening_2022.jpg"
     ],
     "price_min_inr": 327000,
     "price_max_inr": 327000,
     "best_months": [
-      "january"
+      "december",
+      "january",
+      "february",
+      "march",
+      "june",
+      "july",
+      "august",
+      "september"
     ],
     "travel_styles": [
-      "adventure"
+      "adventure",
+      "luxury",
+      "honeymoon"
     ],
-    "highlights": [],
+    "highlights": [
+      "Matterhorn glacier views",
+      "Gornergrat cog railway",
+      "Glacier Paradise cable car"
+    ],
     "is_active": true
   },
   {
@@ -84,19 +131,32 @@
     "name": "Santorini",
     "country": "Greece",
     "tagline": "Greek island in the Aegean Sea",
-    "description": "Santorini, officially Thira or Thera, is a Greek island in the southern Aegean Sea, about 200 km (120 mi) southeast from the mainland. It is the largest island of a small, circular archipelago formed by the Santorini caldera. It is the southernmost member of the Cyclades group of islands, with an area of approximately 73 km2 (28 mi2) and a 2021 census population of 15,480. The municipality of Santorini includes the inhabited islands of Santorini and Therasia, and the uninhabited islands of Nea Kameni, Palaia Kameni, Aspronisi, Anydros, and Christiana. The total land area is 90 km2 (35 mi2). Sa",
+    "description": "Santorini, officially Thira, is a Greek island in the southern Aegean Sea, about 200 km southeast of the mainland. It is the largest island of a small, circular archipelago formed by the Santorini caldera, famous for its whitewashed cliff-top villages, dramatic sunsets over the caldera, volcanic black-and-red beaches and ancient Akrotiri ruins.",
     "images": [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/2011_Dimos_Thiras.png/330px-2011_Dimos_Thiras.png"
     ],
     "price_min_inr": 232000,
     "price_max_inr": 232000,
     "best_months": [
-      "june"
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october"
     ],
     "travel_styles": [
-      "beach"
+      "honeymoon",
+      "beach",
+      "luxury",
+      "cultural"
     ],
-    "highlights": [],
+    "highlights": [
+      "Oia caldera sunset",
+      "Catamaran caldera cruise",
+      "Akrotiri archaeological site"
+    ],
     "is_active": true
   },
   {
@@ -104,19 +164,30 @@
     "name": "Marrakech",
     "country": "Morocco",
     "tagline": "City in Marrakesh–Safi, Morocco",
-    "description": "Marrakesh or Marrakech is the fourth-largest city in Morocco. It is one of the four imperial cities of Morocco and is the capital of the Marrakesh-Safi region. The city lies west of the foothills of the Atlas Mountains.",
+    "description": "Marrakesh or Marrakech is the fourth-largest city in Morocco. One of the four imperial cities and capital of the Marrakesh-Safi region, it lies west of the foothills of the Atlas Mountains and is known for its walled medina, bustling souks, historic palaces, gardens and the lively Jemaa el-Fnaa square.",
     "images": [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Pavillon_Menarag%C3%A4rten.jpg/330px-Pavillon_Menarag%C3%A4rten.jpg"
     ],
     "price_min_inr": 138000,
     "price_max_inr": 138000,
     "best_months": [
-      "october"
+      "march",
+      "april",
+      "may",
+      "september",
+      "october",
+      "november"
     ],
     "travel_styles": [
-      "adventure"
+      "cultural",
+      "adventure",
+      "luxury"
     ],
-    "highlights": [],
+    "highlights": [
+      "Jemaa el-Fnaa square",
+      "Bahia Palace",
+      "Majorelle Garden"
+    ],
     "is_active": true
   },
   {
@@ -124,20 +195,30 @@
     "name": "Cancun",
     "country": "Mexico",
     "tagline": "City in Quintana Roo, Mexico",
-    "description": "Cancún is the most populous city in the Mexican state of Quintana Roo, located in southeast Mexico on the northeast coast of the Yucatán Peninsula. It is a significant tourist destination in Mexico and the seat of the municipality of Benito Juárez. The city is situated on the Caribbean Sea and is one of Mexico's easternmost points. Cancún is located just north of Mexico's Caribbean coast resort area known as the Riviera Maya. It encompasses the Hotel Zone which is the main area for tourism.",
+    "description": "Cancún is the most populous city in the Mexican state of Quintana Roo, on the northeast coast of the Yucatán Peninsula. A significant Caribbean tourist destination, it is situated on the Caribbean Sea just north of the Riviera Maya, and encompasses the Hotel Zone, the main area for beach resorts and tourism.",
     "images": [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Cancun_Strand_Luftbild_%2822143397586%29.jpg/330px-Cancun_Strand_Luftbild_%2822143397586%29.jpg"
     ],
     "price_min_inr": 176000,
     "price_max_inr": 176000,
     "best_months": [
-      "february"
+      "december",
+      "january",
+      "february",
+      "march",
+      "april"
     ],
     "travel_styles": [
       "beach",
-      "luxury"
+      "luxury",
+      "family",
+      "honeymoon"
     ],
-    "highlights": [],
+    "highlights": [
+      "Chichén Itzá day trip",
+      "Isla Mujeres ferry",
+      "Cenote snorkelling"
+    ],
     "is_active": true
   }
 ]
