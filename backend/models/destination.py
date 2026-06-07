@@ -96,6 +96,44 @@ class TextSearchRequest(BaseModel):
         )
 
 
+class ChatRole(str, Enum):
+    user = "user"
+    assistant = "assistant"
+
+
+class ChatMessage(BaseModel):
+    """A single turn in the concierge conversation.
+
+    ``image`` flags that the user's turn carried an uploaded photo (the actual
+    bytes arrive on the multipart request, not in the JSON history).
+    """
+
+    role: ChatRole
+    content: str = Field(default="", max_length=2000)
+    image: bool = Field(default=False)
+
+
+class ChatRequest(BaseModel):
+    """Body for the conversational ``/v1/chat`` endpoint (text turns)."""
+
+    message: str = Field(..., min_length=1, max_length=2000)
+    history: list[ChatMessage] = Field(default_factory=list, max_length=24)
+    filters: SearchFilters = Field(default_factory=SearchFilters)
+    session_id: str | None = None
+
+
+class ChatResponse(BaseModel):
+    """The concierge's reply: prose + any destinations it decided to surface."""
+
+    reply: str
+    results: list[DestinationResult] = Field(default_factory=list)
+    filters: SearchFilters = Field(default_factory=SearchFilters)
+    suggestions: list[str] = Field(default_factory=list)
+    used_llm: bool = False
+    mock_mode: bool = False
+    query_time_ms: int = 0
+
+
 class DestinationCreate(Destination):
     """Payload for the admin create/upsert endpoint."""
 

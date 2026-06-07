@@ -12,7 +12,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import destinations, health, search
+from api import chat, destinations, health, search
+from core.chat_agent import ChatAgent
 from core.clip_encoder import ClipEncoder
 from core.config import get_settings
 from core.metadata_store import MetadataStore
@@ -66,6 +67,12 @@ async def lifespan(app: FastAPI):
     app.state.encoder = encoder
     app.state.vector_store = vector_store
     app.state.metadata_store = metadata_store
+    app.state.chat_agent = ChatAgent(settings)
+    logger.info(
+        "Concierge ready [llm=%s, model=%s].",
+        settings.groq_enabled,
+        settings.groq_model if settings.groq_enabled else "offline-nlu",
+    )
     yield
     logger.info("Shutting down.")
 
@@ -88,6 +95,7 @@ app.add_middleware(
 
 app.include_router(health.router, prefix=settings.api_v1_prefix)
 app.include_router(search.router, prefix=settings.api_v1_prefix)
+app.include_router(chat.router, prefix=settings.api_v1_prefix)
 app.include_router(destinations.router, prefix=settings.api_v1_prefix)
 
 

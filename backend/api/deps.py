@@ -26,6 +26,10 @@ def get_metadata_store(request: Request) -> MetadataStore:
     return request.app.state.metadata_store
 
 
+def get_chat_agent(request: Request):
+    return request.app.state.chat_agent
+
+
 def require_admin_key(
     x_api_key: str | None = Header(default=None),
     settings: Settings = Depends(get_settings),

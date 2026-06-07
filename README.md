@@ -1,13 +1,22 @@
-# Traviante — AI Visual Destination Search
+# Traviante — AI Travel Concierge
 
-A multimodal search engine that lets customers find Traviante travel destinations by
-**uploading a photo** _or_ **typing a natural-language query** — returning ranked
-destination cards in under two seconds.
+A **conversational** destination-discovery experience. Customers **chat** with *Aria*,
+Traviante's AI concierge — describing the trip they want in natural language _or_
+**uploading a photo** of a place they love — and the concierge surfaces ranked
+destination cards inline in the conversation.
 
-It is powered by [OpenAI CLIP](https://github.com/openai/CLIP), which maps **images and
-text into the same 512-dimensional embedding space**. A photo of a snowy Swiss village
-and the text _"snowy mountain honeymoon"_ land near each other in vector space, enabling
-true multimodal search with a single model and no fine-tuning.
+Two AI layers work together:
+
+- **CLIP** ([OpenAI CLIP](https://github.com/openai/CLIP)) maps **images and text into the
+  same 512-dimensional embedding space**, so a photo of a snowy Swiss village and the
+  words _"snowy mountain honeymoon"_ land near each other — true multimodal search with a
+  single model and no fine-tuning.
+- A **Groq-hosted LLM concierge** runs a tool-calling loop: it understands intent,
+  extracts structured preferences (budget / month / style), calls the *same* ranking
+  pipeline the REST API uses, and narrates the matches. With **no `GROQ_API_KEY`** the
+  agent degrades to a deterministic offline NLU so the whole stack still runs key-free.
+
+The UI is a quiet, **light, minimal-neutral** interface — an editorial, premium feel.
 
 ```
             ┌──────────────┐      ┌──────────────┐      ┌─────────────────────┐
@@ -21,9 +30,20 @@ true multimodal search with a single model and no fine-tuning.
 
 | Layer | Tech | Responsibility |
 |-------|------|----------------|
-| **L1 — Presentation** | Next.js 14 (App Router), React 18, Tailwind, Framer Motion | Search widget, filters, result cards. Deployed on Vercel. |
-| **L2 — API** | FastAPI, Pydantic v2, Uvicorn | Stateless REST. Validation, CLIP inference, Pinecone queries, Supabase fetch. |
-| **L3 — ML & Data** | CLIP ViT-B/32, Pinecone Serverless, Supabase Postgres, Cloudinary | Embeddings, vector search, metadata, image CDN. |
+| **L1 — Presentation** | Next.js 14 (App Router), React 18, Tailwind v4, Framer Motion | Conversational concierge UI — chat thread, photo upload composer, inline destination cards. Deployed on Vercel. |
+| **L2 — API** | FastAPI, Pydantic v2, Uvicorn | Stateless REST + `/v1/chat`. Validation, CLIP inference, shared ranking engine, Pinecone queries, Supabase fetch. |
+| **L3 — AI & Data** | CLIP ViT-B/32, Groq LLM, Pinecone Serverless, Supabase Postgres, Cloudinary | Embeddings, conversational reasoning + tool-calling, vector search, metadata, image CDN. |
+
+### Endpoints
+
+| Endpoint | Purpose |
+|----------|---------|
+| `POST /v1/chat` | A text turn with the concierge (carries conversation history + filters). |
+| `POST /v1/chat/image` | A photo turn — CLIP visual match, narrated conversationally. |
+| `POST /v1/search/text`, `POST /v1/search/image` | The raw search API (same ranking engine, no conversation). |
+
+The conversational concierge and the raw search API share one ranking pipeline
+(`core/search_engine.py`), so they can never drift apart.
 
 The frontend never talks to the backend directly — Next.js **Route Handlers** proxy
 requests server-side so the backend URL and API key stay secret.
@@ -61,6 +81,9 @@ uvicorn main:app --reload     # http://localhost:8000/docs
 > The backend runs in **mock mode** automatically when `PINECONE_API_KEY` /
 > `SUPABASE_URL` are not set — it serves bundled sample destinations so you can develop
 > the full stack with zero external accounts. See `core/config.py`.
+>
+> Set **`GROQ_API_KEY`** (free at [console.groq.com](https://console.groq.com/keys)) to
+> enable the LLM concierge; leave it blank to run the deterministic **offline NLU** agent.
 
 ### 2. Index destinations (once you have real keys)
 
@@ -76,7 +99,7 @@ python -m scripts.index_destinations
 cd frontend
 npm install
 cp .env.local.example .env.local   # point BACKEND_URL at the API
-npm run dev                         # http://localhost:3000/search
+npm run dev                         # http://localhost:3000/search  (the concierge chat)
 ```
 
 ## Cost at MVP scale (all free tier except backend host)

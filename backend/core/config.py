@@ -37,6 +37,15 @@ class Settings(BaseSettings):
     clip_device: str = Field(default="auto")  # auto | cpu | cuda
     embedding_dim: int = 512
 
+    # ── Conversational AI (Groq) ───────────────────────────────────────────
+    # Groq offers a free, OpenAI-compatible LLM API. When GROQ_API_KEY is set
+    # the concierge chatbot reasons + extracts preferences with an LLM; when it
+    # is absent the agent degrades to a deterministic offline NLU so the stack
+    # still runs with zero credentials.
+    groq_api_key: str | None = Field(default=None)
+    groq_model: str = Field(default="llama-3.3-70b-versatile")
+    groq_base_url: str = Field(default="https://api.groq.com/openai/v1")
+
     # ── Pinecone ───────────────────────────────────────────────────────────
     pinecone_api_key: str | None = Field(default=None)
     pinecone_index_name: str = Field(default="traviante-destinations")
@@ -67,6 +76,11 @@ class Settings(BaseSettings):
     @property
     def supabase_enabled(self) -> bool:
         return bool(self.supabase_url and self.supabase_key)
+
+    @property
+    def groq_enabled(self) -> bool:
+        """True when an LLM key is present and the agent can reason with Groq."""
+        return bool(self.groq_api_key)
 
     @property
     def mock_mode(self) -> bool:

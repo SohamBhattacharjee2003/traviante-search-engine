@@ -24,3 +24,8 @@ requests>=2.32.3
 # ── Data services ──────────────────────────────────────────────
 pinecone==5.4.2
 supabase==2.11.0
+
+# ── Conversational AI ──────────────────────────────────────────
+# Groq is OpenAI-compatible; we call it over plain HTTP (no SDK needed).
+# httpx also ships with supabase, pinned here so the chat agent is explicit.
+httpx>=0.27.0

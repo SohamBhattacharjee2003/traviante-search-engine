@@ -1,7 +1,12 @@
 // Client-side API helpers. These call the Next.js proxy routes (/api/search/*),
 // NOT the backend directly — the backend URL and key stay server-side.
 
-import type { SearchFilters, SearchResponse } from "./types";
+import type {
+  ChatHistoryItem,
+  ChatResponse,
+  SearchFilters,
+  SearchResponse,
+} from "./types";
 
 function filtersToForm(form: FormData, filters: SearchFilters): void {
   if (filters.budget_max != null) form.append("budget_max", String(filters.budget_max));
@@ -36,6 +41,42 @@ export async function searchByText(
     body: JSON.stringify({ query, ...filters, session_id: sessionId }),
   });
   if (!res.ok) throw new Error((await safeError(res)) ?? "Text search failed");
+  return res.json();
+}
+
+/** Send a text turn to the conversational concierge. */
+export async function sendChat(
+  message: string,
+  history: ChatHistoryItem[],
+  filters: SearchFilters,
+  sessionId?: string,
+): Promise<ChatResponse> {
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message, history, filters, session_id: sessionId }),
+  });
+  if (!res.ok) throw new Error((await safeError(res)) ?? "The concierge is unavailable");
+  return res.json();
+}
+
+/** Send an uploaded photo as a chat turn; the concierge narrates the visual matches. */
+export async function sendChatImage(
+  file: File,
+  history: ChatHistoryItem[],
+  filters: SearchFilters,
+  caption: string,
+  sessionId?: string,
+): Promise<ChatResponse> {
+  const form = new FormData();
+  form.append("file", file);
+  form.append("history", JSON.stringify(history));
+  form.append("caption", caption);
+  filtersToForm(form, filters);
+  if (sessionId) form.append("session_id", sessionId);
+
+  const res = await fetch("/api/chat/image", { method: "POST", body: form });
+  if (!res.ok) throw new Error((await safeError(res)) ?? "Image search failed");
   return res.json();
 }
 

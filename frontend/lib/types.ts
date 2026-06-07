@@ -49,6 +49,40 @@ export interface SearchResponse {
   mock_mode: boolean;
 }
 
+// ── Conversational concierge ──────────────────────────────────────────
+export type ChatRole = "user" | "assistant";
+
+/** A turn sent up to the backend as conversation history. */
+export interface ChatHistoryItem {
+  role: ChatRole;
+  content: string;
+  image?: boolean;
+}
+
+/** The backend's reply: prose + any destinations the agent surfaced. */
+export interface ChatResponse {
+  reply: string;
+  results: DestinationResult[];
+  filters: SearchFilters;
+  suggestions: string[];
+  used_llm: boolean;
+  mock_mode: boolean;
+  query_time_ms: number;
+}
+
+/** A message rendered in the chat thread (UI-side, richer than history). */
+export interface ChatTurn {
+  id: string;
+  role: ChatRole;
+  content: string;
+  imageUrl?: string; // local object URL for an uploaded photo
+  results?: DestinationResult[];
+  suggestions?: string[];
+  usedLlm?: boolean;
+  pending?: boolean; // assistant turn still streaming/awaiting
+  error?: boolean;
+}
+
 export const TRAVEL_STYLES: TravelStyle[] = [
   "honeymoon",
   "adventure",
