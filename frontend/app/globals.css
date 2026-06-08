@@ -1,30 +1,32 @@
 /* Tailwind CSS v4 — single import replaces the old @tailwind base/components/utilities. */
 @import "tailwindcss";
 
-/* ── CSS-first theme (replaces tailwind.config.ts in v4) ──────────────
-   Minimal-neutral light palette: off-white canvas, near-black ink, a single
-   restrained green accent and a warm stone secondary. Understated, editorial,
-   premium — the look of a quiet luxury travel house.
+/* ── Theming model ─────────────────────────────────────────────────────
+   Tailwind v4 compiles colour utilities to `var(--color-*)`, so the whole
+   palette swaps at runtime just by overriding those custom properties under a
+   `[data-theme]` selector — no rebuild, no flash (see the inline script in
+   layout.tsx). `@theme` below is the DEFAULT (Aurora); the data-theme blocks
+   after it are the alternates.
 
-   Each token below generates utilities automatically:
-     --color-accent  → bg-accent / text-accent / border-accent ...
-     --font-display  → font-display
-     --radius-xs     → rounded-xs
+   Professional · futuristic palettes:
+     • Aurora   — deep-space navy, electric blue → violet neon   (default, dark)
+     • Quantum  — carbon black, mint-teal + blue neon                    (dark)
+     • Platinum — cool clean light, electric indigo                     (light)
 */
 @theme {
-  --color-bg: #faf9f6;        /* off-white canvas */
-  --color-surface: #ffffff;   /* cards */
-  --color-surface2: #f3f1ea;  /* subtle panels / inset */
-  --color-border: #e6e3da;    /* hairline */
-  --color-accent: #2f6e4f;    /* restrained green */
-  --color-accent-soft: #e7efe9;
-  --color-accent2: #8a8578;   /* warm stone */
-  --color-accent3: #3f6f8f;   /* muted slate-blue for asides */
-  --color-ink: #16130f;       /* near-black */
-  --color-muted: #6b665d;     /* stone-gray text */
-  --color-faint: #9b968c;     /* lightest readable gray */
-  --color-danger: #b42318;
-  --color-warn: #b7791f;
+  --color-bg: #070b14;
+  --color-surface: #0e1422;
+  --color-surface2: #161e30;
+  --color-border: #232c42;
+  --color-accent: #4f8cff;        /* electric blue */
+  --color-accent-soft: #16213c;
+  --color-accent2: #a06bff;       /* violet */
+  --color-accent3: #2dd4e6;       /* cyan */
+  --color-ink: #eaf0fb;
+  --color-muted: #8b97b2;
+  --color-faint: #586079;
+  --color-danger: #ff6b6b;
+  --color-warn: #ffc74d;
 
   --font-display: "Fraunces", Georgia, serif;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
@@ -32,9 +34,68 @@
   --font-serif: "Newsreader", Georgia, serif;
 
   --radius-xs: 3px;
+
+  /* Elevation tuned for dark glass surfaces. */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 18px 44px rgba(3, 8, 20, 0.6);
+  --shadow-float: 0 12px 40px rgba(3, 8, 20, 0.55);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--color-accent) 35%, transparent),
+    0 8px 30px color-mix(in oklab, var(--color-accent) 30%, transparent);
 }
 
-/* ── Base ─────────────────────────────────────────────────────────── */
+/* ── Quantum — carbon black, mint-teal neon ───────────────────────────── */
+[data-theme="quantum"] {
+  color-scheme: dark;
+  --color-bg: #050608;
+  --color-surface: #0e1117;
+  --color-surface2: #161b24;
+  --color-border: #232a36;
+  --color-accent: #00e0c7;
+  --color-accent-soft: #0b2a28;
+  --color-accent2: #3b82f6;
+  --color-accent3: #7df9e0;
+  --color-ink: #e9f2f0;
+  --color-muted: #8795a0;
+  --color-faint: #586470;
+  --color-danger: #ff6b6b;
+  --color-warn: #ffc74d;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 18px 44px rgba(0, 0, 0, 0.65);
+  --shadow-float: 0 12px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--color-accent) 40%, transparent),
+    0 8px 30px color-mix(in oklab, var(--color-accent) 35%, transparent);
+}
+
+/* ── Platinum — cool clean light, electric indigo ─────────────────────── */
+[data-theme="platinum"] {
+  color-scheme: light;
+  --color-bg: #f4f6fb;
+  --color-surface: #ffffff;
+  --color-surface2: #eaeef7;
+  --color-border: #dde4f1;
+  --color-accent: #4f46e5;        /* indigo */
+  --color-accent-soft: #e9e9fc;
+  --color-accent2: #0ea5e9;       /* sky */
+  --color-accent3: #7c3aed;       /* violet */
+  --color-ink: #0f1729;
+  --color-muted: #5b6678;
+  --color-faint: #97a1b5;
+  --color-danger: #dc2626;
+  --color-warn: #b7791f;
+
+  --shadow-card: 0 1px 2px rgba(15, 23, 41, 0.05);
+  --shadow-card-hover: 0 16px 40px rgba(15, 23, 41, 0.12);
+  --shadow-float: 0 12px 36px rgba(15, 23, 41, 0.1);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--color-accent) 25%, transparent),
+    0 10px 30px color-mix(in oklab, var(--color-accent) 22%, transparent);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────── */
+html {
+  /* Default (Aurora/Quantum are dark); Platinum overrides to light. */
+  color-scheme: dark;
+}
 html,
 body {
   background: var(--color-bg);
@@ -44,7 +105,16 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Slim, light scrollbar to match the bright UI. */
+/* Smoothly cross-fade the palette when a theme is switched. */
+html {
+  transition: background-color 0.4s ease;
+}
+body * {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Slim scrollbar that follows the active theme. */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -53,7 +123,7 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #dcd8cd;
+  background: var(--color-border);
   border-radius: 6px;
   border: 2px solid var(--color-bg);
 }
@@ -61,20 +131,16 @@ body {
   background: var(--color-accent2);
 }
 
-/* Loading skeleton shimmer. */
+/* Loading skeleton shimmer — theme-aware via tokens. */
 @keyframes shimmer {
-  0% {
-    background-position: -400px 0;
-  }
-  100% {
-    background-position: 400px 0;
-  }
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
 }
 .skeleton {
   background: linear-gradient(
     90deg,
     var(--color-surface2) 0px,
-    #ece9e1 200px,
+    var(--color-border) 200px,
     var(--color-surface2) 400px
   );
   background-size: 800px 100%;
@@ -88,6 +154,71 @@ body {
 }
 .typing-dot {
   animation: typing 1.2s infinite ease-in-out;
+}
+
+/* Gentle entrance for hero elements. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise {
+  animation: rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Slow drift for the ambient orbs. */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(18px, -22px) scale(1.08); }
+}
+.drift {
+  animation: drift 14s ease-in-out infinite;
+}
+
+/* ── Futuristic flourishes ────────────────────────────────────────────── */
+
+/* Neon gradient text (accent → violet → cyan). */
+.text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-accent),
+    var(--color-accent2) 55%,
+    var(--color-accent3)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Theme-aware ambient glow behind heroes / panels. */
+.glow {
+  background: radial-gradient(
+    ellipse 55% 50% at 50% 0%,
+    color-mix(in oklab, var(--color-accent) 22%, transparent),
+    transparent 70%
+  );
+}
+
+/* Subtle tech grid background, fading out toward the edges. */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-border) 65%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-border) 65%, transparent) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 60% at 50% 32%, #000 35%, transparent 78%);
+  mask-image: radial-gradient(ellipse 75% 60% at 50% 32%, #000 35%, transparent 78%);
+}
+
+/* Glass panel — frosted surface with a hairline edge. */
+.glass {
+  background: color-mix(in oklab, var(--color-surface) 70%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in oklab, var(--color-border) 80%, transparent);
+}
+
+/* Glowing accent shadow utility. */
+.shadow-glow {
+  box-shadow: var(--shadow-glow);
 }
 
 /* Fine print numerals look better tabular in prices. */

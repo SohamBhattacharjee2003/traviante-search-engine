@@ -18,6 +18,7 @@ import type {
 } from "@/lib/types";
 import { shortMonth, titleCase } from "@/lib/format";
 import DestinationCard, { buildEnquiryHref } from "./DestinationCard";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const GREETING =
@@ -271,24 +272,29 @@ export default function ChatExperience() {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="border-b border-border bg-bg/80 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-3.5">
-          <Link href="/" className="font-display text-[19px] font-semibold tracking-tight text-ink">
-            Traviante<span className="text-accent">.</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <span className="hidden items-center gap-1.5 text-[11px] text-muted sm:flex">
+      <header className="sticky top-0 z-20 border-b border-border bg-bg/75 backdrop-blur-md">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-3">
+          <Link
+            href="/"
+            className="flex items-center gap-2 font-display text-[19px] font-semibold tracking-tight text-ink"
+          >
+            Traviante<span className="-ml-1.5 text-accent">.</span>
+            <span className="ml-1 hidden items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-accent sm:inline-flex">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
-              AI Concierge
+              Concierge
             </span>
+          </Link>
+          <div className="flex items-center gap-2.5">
             <FilterSummary filters={filters} count={activeFilterCount} onClear={() => setFilters({})} />
+            <ThemeSwitcher />
           </div>
         </div>
       </header>
 
       {/* Thread */}
-      <div ref={threadRef} className="flex-1 overflow-y-auto">
-        <div className="mx-auto flex max-w-3xl flex-col gap-6 px-5 py-8">
+      <div ref={threadRef} className="relative flex-1 overflow-y-auto">
+        <div className="glow pointer-events-none absolute inset-x-0 top-0 h-64" />
+        <div className="relative mx-auto flex max-w-3xl flex-col gap-6 px-5 py-8">
           {turns.map((turn) =>
             turn.role === "assistant" ? (
               <AssistantTurn
@@ -330,7 +336,7 @@ export default function ChatExperience() {
             </div>
           )}
 
-          <div className="flex items-end gap-2 rounded-2xl border border-border bg-surface p-2 shadow-[0_1px_2px_rgba(20,17,15,0.04)] focus-within:border-accent/50">
+          <div className="flex items-end gap-2 rounded-2xl border border-border bg-surface p-2 shadow-float transition-colors focus-within:border-accent/50">
             <input
               ref={fileInputRef}
               type="file"
@@ -400,7 +406,7 @@ function AssistantTurn({
       transition={{ duration: 0.25 }}
       className="flex gap-3"
     >
-      <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent/10 font-display text-[13px] font-semibold text-accent">
+      <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-linear-to-br from-accent to-accent3 font-display text-[13px] font-semibold text-white shadow-card ring-1 ring-black/5">
         A
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-3">
@@ -417,17 +423,24 @@ function AssistantTurn({
         )}
 
         {turn.results && turn.results.length > 0 && (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {turn.results.map((d, i) => (
-              <DestinationCard
-                key={d.id}
-                destination={d}
-                filters={filters}
-                onQuote={onQuote}
-                compact
-                index={i}
-              />
-            ))}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2.5 text-[10.5px] font-medium uppercase tracking-[0.2em] text-faint">
+              <span className="text-accent3">✦</span>
+              {turn.results.length} matched destination{turn.results.length > 1 ? "s" : ""}
+              <span className="h-px flex-1 bg-linear-to-r from-border to-transparent" />
+            </div>
+            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+              {turn.results.map((d, i) => (
+                <DestinationCard
+                  key={d.id}
+                  destination={d}
+                  filters={filters}
+                  onQuote={onQuote}
+                  compact
+                  index={i}
+                />
+              ))}
+            </div>
           </div>
         )}
 

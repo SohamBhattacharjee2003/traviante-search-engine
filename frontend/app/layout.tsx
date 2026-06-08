@@ -13,10 +13,14 @@ export const metadata: Metadata = {
   },
 };
 
+// Applied before first paint so a saved theme never flashes the default.
+const noFlashTheme = `try{var t=localStorage.getItem('traviante-theme');if(t){document.documentElement.dataset.theme=t;}}catch(e){}`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="aurora" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: noFlashTheme }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

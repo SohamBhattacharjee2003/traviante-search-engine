@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { DestinationResult, SearchFilters } from "@/lib/types";
-import { formatMatch, formatPriceRange, shortMonth } from "@/lib/format";
+import { formatPriceRange, shortMonth } from "@/lib/format";
 
 interface Props {
   destination: DestinationResult;
@@ -22,23 +22,24 @@ export default function DestinationCard({
   const d = destination;
   const image = d.images[0];
   const order = index ?? d.rank - 1;
+  const matchPct = Math.round(d.score * 100);
 
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.32, delay: order * 0.05 }}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-[0_1px_2px_rgba(20,17,15,0.04)] transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_24px_rgba(20,17,15,0.08)]"
+      transition={{ duration: 0.4, delay: order * 0.06 }}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/50 hover:shadow-card-hover"
     >
-      <div className={`relative overflow-hidden ${compact ? "aspect-[16/10]" : "aspect-[4/3]"}`}>
-        {/* Plain img keeps the demo dependency-free; swap for next/image in prod. */}
+      {/* ── Image with overlaid title ───────────────────────────────────── */}
+      <div className={`relative overflow-hidden ${compact ? "aspect-5/4" : "aspect-4/3"}`}>
         {image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={image}
             alt={d.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
             loading="lazy"
           />
         ) : (
@@ -47,63 +48,81 @@ export default function DestinationCard({
           </div>
         )}
 
-        {/* Rank + match score badges */}
-        <div className="absolute left-3 top-3 flex items-center gap-2">
-          <span className="rounded-full bg-white/85 px-2.5 py-1 font-display text-[11px] font-semibold text-ink backdrop-blur">
-            #{d.rank}
-          </span>
+        {/* Cinematic scrim for legible overlay text */}
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/15 to-black/25" />
+
+        {/* Rank */}
+        <span className="absolute left-3 top-3 grid h-7 w-7 place-items-center rounded-full border border-white/20 bg-black/40 font-display text-[11px] font-semibold text-white backdrop-blur">
+          {d.rank}
+        </span>
+
+        {/* Match score */}
+        <span className="tabular absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-1 text-[10.5px] font-semibold text-white backdrop-blur">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent3" />
+          {matchPct}%
+        </span>
+
+        {/* Title block overlaid on the photo */}
+        <div className="absolute inset-x-0 bottom-0 p-4">
+          <h3 className="font-display text-[20px] font-semibold leading-tight text-white drop-shadow-sm">
+            {d.name}
+          </h3>
+          <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.2em] text-white/70">
+            {d.country}
+          </p>
         </div>
-        <div className="absolute right-3 top-3">
-          <span className="tabular rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur">
-            {formatMatch(d.score)}
-          </span>
+
+        {/* Match-strength bar hugging the image's bottom edge */}
+        <div className="absolute inset-x-0 bottom-0 h-1 bg-black/30">
+          <div
+            className="h-full bg-linear-to-r from-accent via-accent2 to-accent3"
+            style={{ width: `${Math.max(8, matchPct)}%` }}
+          />
         </div>
       </div>
 
-      <div className={`flex flex-1 flex-col gap-3 ${compact ? "p-4" : "p-5"}`}>
-        <div>
-          <h3 className="font-display text-[17px] font-semibold leading-tight text-ink">
-            {d.name}
-          </h3>
-          <p className="text-[10px] uppercase tracking-[0.18em] text-faint">{d.country}</p>
-        </div>
-
+      {/* ── Details ─────────────────────────────────────────────────────── */}
+      <div className="flex flex-1 flex-col gap-3 p-4">
         {d.tagline && (
-          <p className="font-serif text-[13px] italic leading-snug text-muted">{d.tagline}</p>
+          <p className="line-clamp-2 font-serif text-[13px] italic leading-snug text-muted">
+            {d.tagline}
+          </p>
         )}
 
-        {/* Top highlights */}
         {!compact && d.highlights.length > 0 && (
           <ul className="space-y-1">
             {d.highlights.slice(0, 2).map((h) => (
               <li key={h} className="flex items-start gap-1.5 text-[11.5px] text-muted">
-                <span className="text-accent">›</span>
+                <span className="text-accent3">›</span>
                 {h}
               </li>
             ))}
           </ul>
         )}
 
-        {/* Price + best months */}
         <div className="mt-auto flex items-end justify-between gap-2 border-t border-border pt-3">
           <div>
-            <div className="tabular font-display text-sm font-semibold text-ink">
+            <div className="tabular text-gradient font-display text-[17px] font-semibold">
               {formatPriceRange(d.price_min_inr, d.price_max_inr)}
             </div>
-            <div className="text-[10px] text-faint">
-              Best: {d.best_months.slice(0, 3).map(shortMonth).join(" · ") || "year-round"}
+            <div className="mt-0.5 text-[10px] text-faint">
+              Best · {d.best_months.slice(0, 3).map(shortMonth).join(" / ") || "year-round"}
             </div>
           </div>
+          {d.match_reason && (
+            <span className="rounded-full border border-accent/25 bg-accent-soft px-2.5 py-1 text-[9.5px] font-medium uppercase tracking-wide text-accent">
+              {d.match_reason.replace(/^Matches your |^Great for /i, "")}
+            </span>
+          )}
         </div>
-
-        {d.match_reason && <div className="text-[10.5px] text-accent3">{d.match_reason}</div>}
 
         <button
           type="button"
           onClick={() => onQuote(d)}
-          className="mt-1 w-full rounded-lg bg-accent py-2.5 font-display text-[12.5px] font-semibold tracking-wide text-white transition-opacity hover:opacity-90"
+          className="group/btn mt-1 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-linear-to-r from-accent to-accent2 py-2.5 font-display text-[12.5px] font-semibold tracking-wide text-white transition-all hover:shadow-glow"
         >
-          Get a quote →
+          Get a quote
+          <span className="transition-transform group-hover/btn:translate-x-0.5">→</span>
         </button>
       </div>
     </motion.article>
