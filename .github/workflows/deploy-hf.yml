@@ -1,0 +1,55 @@
+name: Deploy backend to Hugging Face Space
+
+# Pushes the backend/ subfolder to a Hugging Face Space (Docker SDK) on every
+# push to main. The Space's Dockerfile + README (with HF front-matter) live in
+# backend/, so we split that subtree to the Space repo's root.
+#
+# Required GitHub repo settings (Settings → Secrets and variables → Actions):
+#   • Secret   HF_TOKEN     — a Hugging Face *write* token (hf.co/settings/tokens)
+#   • Variable HF_SPACE_ID  — "<username>/<space-name>", e.g. user/traviante-backend
+#   • Variable HF_USERNAME  — (optional) HF username if it differs from the
+#                             owner part of HF_SPACE_ID (e.g. for org spaces)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-hf.yml"
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-hf
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history — subtree split needs it)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push backend/ to the Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE_ID: ${{ vars.HF_SPACE_ID }}
+          HF_USERNAME: ${{ vars.HF_USERNAME }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HF_TOKEN:-}" ] || [ -z "${HF_SPACE_ID:-}" ]; then
+            echo "::error::Set the HF_TOKEN secret and the HF_SPACE_ID variable in repo settings."
+            exit 1
+          fi
+          USER="${HF_USERNAME:-${HF_SPACE_ID%%/*}}"
+          REMOTE="https://${USER}:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE_ID}.git"
+
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+          # Split backend/ into a temporary branch whose root IS the backend dir,
+          # then force-push it to the Space's main branch.
+          git subtree split --prefix backend -b hf-deploy
+          git push --force "$REMOTE" hf-deploy:main
+          echo "Deployed backend/ to https://huggingface.co/spaces/${HF_SPACE_ID}"

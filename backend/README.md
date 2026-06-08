@@ -1,3 +1,13 @@
+---
+title: Traviante Backend
+emoji: 🌍
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Traviante Backend — FastAPI + CLIP
 
 Stateless REST API that turns an image or a text query into a ranked list of
